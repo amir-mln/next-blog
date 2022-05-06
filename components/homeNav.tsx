@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
-import { Pane, majorScale, Text, Button } from 'evergreen-ui'
-import NextLink from 'next/link'
-import { useSession } from 'next-auth/client'
-import Container from './container'
-import Logo from './logo'
+import React, { FC } from 'react';
+import { Pane, majorScale, Text, Button } from 'evergreen-ui';
+import NextLink from 'next/link';
+import { useSession } from 'next-auth/react';
+import Container from './container';
+import Logo from './logo';
 
 const HomeNav: FC<{ links?: { name: string; link: string }[] }> = ({ links }) => {
-  const [session] = useSession()
+  const { data: session } = useSession();
 
   return (
     <nav>
@@ -42,11 +42,11 @@ const HomeNav: FC<{ links?: { name: string; link: string }[] }> = ({ links }) =>
         </Container>
       </Pane>
     </nav>
-  )
-}
+  );
+};
 
 HomeNav.defaultProps = {
   links: [{ name: 'Blog', link: '/blog' }],
-}
+};
 
-export default HomeNav
+export default HomeNav;

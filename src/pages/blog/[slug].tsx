@@ -1,23 +1,25 @@
-import React, { FC } from 'react'
-import hydrate from 'next-mdx-remote/hydrate'
-import { majorScale, Pane, Heading, Spinner } from 'evergreen-ui'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { Post } from '../../types'
-import Container from '../../components/container'
-import HomeNav from '../../components/homeNav'
+import { FC } from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { serialize } from 'next-mdx-remote/serialize';
+import { majorScale, Pane, Heading, Spinner } from 'evergreen-ui';
+
+import { Post } from '../../../types';
+import Container from 'components/container';
+import HomeNav from 'components/homeNav';
 
 const BlogPost: FC<Post> = ({ source, frontMatter }) => {
-  const content = hydrate(source)
-  const router = useRouter()
+  const content = serialize(source);
+  const router = useRouter();
 
   if (router.isFallback) {
     return (
       <Pane width="100%" height="100%">
         <Spinner size={48} />
       </Pane>
-    )
+    );
   }
+
   return (
     <Pane>
       <Head>
@@ -36,17 +38,12 @@ const BlogPost: FC<Post> = ({ source, frontMatter }) => {
         </Container>
       </main>
     </Pane>
-  )
-}
+  );
+};
 
 BlogPost.defaultProps = {
-  source: '',
+  content: '',
   frontMatter: { title: 'default title', summary: 'summary', publishedOn: '' },
-}
+};
 
-/**
- * Need to get the paths here
- * then the the correct post for the matching path
- * Posts can come from the fs or our CMS
- */
-export default BlogPost
+export default BlogPost;

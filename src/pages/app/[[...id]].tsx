@@ -1,13 +1,13 @@
-import React, { FC, useState } from 'react'
-import { Pane, Dialog, majorScale } from 'evergreen-ui'
-import { useRouter } from 'next/router'
-import Logo from '../../components/logo'
-import FolderList from '../../components/folderList'
-import NewFolderButton from '../../components/newFolderButton'
-import User from '../../components/user'
-import FolderPane from '../../components/folderPane'
-import DocPane from '../../components/docPane'
-import NewFolderDialog from '../../components/newFolderDialog'
+import React, { FC, useState } from 'react';
+import { Pane, Dialog, majorScale } from 'evergreen-ui';
+import { useRouter } from 'next/router';
+import Logo from 'components/logo';
+import FolderList from 'components/folderList';
+import NewFolderButton from 'components/newFolderButton';
+import User from 'components/user';
+import FolderPane from 'components/folderPane';
+import DocPane from 'components/docPane';
+import NewFolderDialog from 'components/newFolderDialog';
 
 const App: FC<{ folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs?: any[] }> = ({
   folders,
@@ -15,20 +15,20 @@ const App: FC<{ folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs
   activeFolder,
   activeDocs,
 }) => {
-  const router = useRouter()
-  const [newFolderIsShown, setIsShown] = useState(false)
+  const router = useRouter();
+  const [newFolderIsShown, setIsShown] = useState(false);
 
   const Page = () => {
     if (activeDoc) {
-      return <DocPane folder={activeFolder} doc={activeDoc} />
+      return <DocPane folder={activeFolder} doc={activeDoc} />;
     }
 
     if (activeFolder) {
-      return <FolderPane folder={activeFolder} docs={activeDocs} />
+      return <FolderPane folder={activeFolder} docs={activeDocs} />;
     }
 
-    return null
-  }
+    return null;
+  };
 
   if (false) {
     return (
@@ -44,7 +44,7 @@ const App: FC<{ folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs
       >
         Sign in to continue
       </Dialog>
-    )
+    );
   }
 
   return (
@@ -65,12 +65,12 @@ const App: FC<{ folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs
       </Pane>
       <NewFolderDialog close={() => setIsShown(false)} isShown={newFolderIsShown} onNewFolder={() => {}} />
     </Pane>
-  )
-}
+  );
+};
 
 App.defaultProps = {
   folders: [],
-}
+};
 
 /**
  * Catch all handler. Must handle all different page
@@ -83,4 +83,4 @@ App.defaultProps = {
  *
  * @param context
  */
-export default App
+export default App;

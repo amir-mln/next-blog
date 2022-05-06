@@ -1,14 +1,15 @@
-import React, { FC, useState } from 'react'
-import { Pane, Heading, majorScale, DocumentIcon, Button } from 'evergreen-ui'
-import Link from 'next/link'
-import { getRandomGradientCss } from '../utils/gradients'
-import NewFolderButton from './newFolderButton'
-import NewDocDialog from './newDocumentDialog'
+import React, { FC, useState } from 'react';
+import { Pane, Heading, majorScale, DocumentIcon, Button } from 'evergreen-ui';
+import Link from 'next/link';
+
+import { getRandomGradientCss } from 'utils/gradients';
+import NewFolderButton from './newFolderButton';
+import NewDocDialog from './newDocumentDialog';
 
 const FolderPane: FC<{ folder: any; docs: any[] }> = ({ folder, docs }) => {
-  const { bg, image } = getRandomGradientCss()
-  const [isShown, setIsShown] = useState(false)
-  const [allDocs, setDocs] = useState(docs || [])
+  const { bg, image } = getRandomGradientCss();
+  const [isShown, setIsShown] = useState(false);
+  const [allDocs, setDocs] = useState(docs || []);
 
   const handleNewDoc = async (name: string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/doc/`, {
@@ -17,11 +18,11 @@ const FolderPane: FC<{ folder: any; docs: any[] }> = ({ folder, docs }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-    })
+    });
 
-    const { data } = await res.json()
-    setDocs((state) => [...state, data])
-  }
+    const { data } = await res.json();
+    setDocs((state) => [...state, data]);
+  };
 
   return (
     <Pane>
@@ -51,11 +52,11 @@ const FolderPane: FC<{ folder: any; docs: any[] }> = ({ folder, docs }) => {
 
       <NewDocDialog isShown={isShown} onNewDoc={handleNewDoc} close={() => setIsShown(false)} />
     </Pane>
-  )
-}
+  );
+};
 
 FolderPane.defaultProps = {
   docs: [],
-}
+};
 
-export default FolderPane
+export default FolderPane;

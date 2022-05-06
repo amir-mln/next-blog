@@ -1,8 +1,8 @@
-import React from 'react'
-import { Pane, majorScale, Text } from 'evergreen-ui'
-import Logo from '../components/logo'
+import React from 'react';
+import { Pane, majorScale, Text } from 'evergreen-ui';
 
-import SocialButton from '../components/socialButton'
+import Logo from 'components/logo';
+import SocialButton from 'components/socialButton';
 
 const Signin = () => {
   return (
@@ -41,7 +41,7 @@ const Signin = () => {
         </Pane>
       </Pane>
     </Pane>
-  )
-}
+  );
+};
 
-export default Signin
+export default Signin;

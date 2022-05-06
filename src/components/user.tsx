@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
-import { Pane, Position, Avatar, Popover, Menu, LogOutIcon, majorScale, Text } from 'evergreen-ui'
-import { signOut } from 'next-auth/client'
-import { UserSession } from '../types'
+import React, { FC } from 'react';
+import { Pane, Position, Avatar, Popover, Menu, LogOutIcon, majorScale, Text } from 'evergreen-ui';
+import { signOut } from 'next-auth/react';
+import { UserSession } from '../../types';
 
 const User: FC<{ user: UserSession }> = ({ user }) => {
   return (
@@ -40,7 +40,7 @@ const User: FC<{ user: UserSession }> = ({ user }) => {
         </Pane>
       </Popover>
     </Pane>
-  )
-}
+  );
+};
 
-export default User
+export default User;

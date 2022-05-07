@@ -7,10 +7,10 @@ import { MDXRemote } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import { majorScale, Pane, Heading, Spinner } from 'evergreen-ui';
 
-import { Post } from '../../../types';
-import { posts as cmsPosts } from '../../../content';
-import Container from 'components/container';
+import { Post } from 'types/types';
 import HomeNav from 'components/homeNav';
+import Container from 'components/container';
+import { posts as cmsPosts } from 'constants/content';
 
 import type { GetStaticPropsContext } from 'next';
 

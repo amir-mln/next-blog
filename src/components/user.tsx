@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Pane, Position, Avatar, Popover, Menu, LogOutIcon, majorScale, Text } from 'evergreen-ui';
 import { signOut } from 'next-auth/react';
-import { UserSession } from '../../types';
+import { UserSession } from 'types/types';
 
 const User: FC<{ user: UserSession }> = ({ user }) => {
   return (

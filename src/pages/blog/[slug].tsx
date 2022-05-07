@@ -67,15 +67,16 @@ export function getStaticPaths() {
   return { paths: slugs, fallback: true };
 }
 
-export async function getStaticProps({ params }: GetStaticPropsContext) {
+export async function getStaticProps({ params, preview }: GetStaticPropsContext) {
   let postFile: string;
   const slug = params!.slug as string;
+  const postsKey = preview ? 'draft' : 'published';
 
   try {
     const postsPath = path.join(process.cwd(), 'src', 'posts', slug + '.mdx');
     postFile = fs.readFileSync(postsPath, 'utf-8');
   } catch {
-    for (const post of cmsPosts.published) {
+    for (const post of cmsPosts[postsKey]) {
       if (post.includes(`slug: ${slug}`)) {
         postFile = post;
         break;

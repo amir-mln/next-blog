@@ -7,13 +7,6 @@ import Logo from 'components/logo';
 import SocialButton from 'components/socialButton';
 
 const Signin = () => {
-  const { data: session } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (session) router.push('/app');
-  }, [session, router]);
-
   return (
     <Pane height="100vh" width="100vw" display="flex">
       <Pane

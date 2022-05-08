@@ -1,36 +1,36 @@
+import { useRouter } from 'next/router';
 import React, { FC, useState } from 'react';
 import { Pane, Dialog, majorScale } from 'evergreen-ui';
-import { useRouter } from 'next/router';
+import { getSession, useSession } from 'next-auth/react';
+
 import Logo from 'components/logo';
-import FolderList from 'components/folderList';
-import NewFolderButton from 'components/newFolderButton';
 import User from 'components/user';
-import FolderPane from 'components/folderPane';
 import DocPane from 'components/docPane';
+import FolderList from 'components/folderList';
+import FolderPane from 'components/folderPane';
+import NewFolderButton from 'components/newFolderButton';
 import NewFolderDialog from 'components/newFolderDialog';
 
-const App: FC<{ folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs?: any[] }> = ({
-  folders,
-  activeDoc,
-  activeFolder,
-  activeDocs,
-}) => {
+import type { GetServerSidePropsContext } from 'next';
+
+type pageProps = { folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs?: any[] };
+
+function App({ folders = [], activeDoc, activeFolder, activeDocs }: pageProps) {
   const router = useRouter();
   const [newFolderIsShown, setIsShown] = useState(false);
+  const { status } = useSession();
 
-  const Page = () => {
-    if (activeDoc) {
-      return <DocPane folder={activeFolder} doc={activeDoc} />;
-    }
+  const renderPage = () => {
+    if (activeDoc) return <DocPane folder={activeFolder} doc={activeDoc} />;
 
-    if (activeFolder) {
-      return <FolderPane folder={activeFolder} docs={activeDocs} />;
-    }
+    if (activeFolder) return <FolderPane folder={activeFolder} docs={activeDocs} />;
 
     return null;
   };
 
-  if (false) {
+  if (status === 'loading') return null;
+
+  if (status === 'unauthenticated') {
     return (
       <Dialog
         isShown
@@ -40,7 +40,7 @@ const App: FC<{ folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs
         hasClose={false}
         shouldCloseOnOverlayClick={false}
         shouldCloseOnEscapePress={false}
-        onConfirm={() => router.push('/signin')}
+        onConfirm={() => router.push('/auth/signin')}
       >
         Sign in to continue
       </Dialog>
@@ -60,27 +60,20 @@ const App: FC<{ folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs
         </Pane>
       </Pane>
       <Pane marginLeft={300} width="calc(100vw - 300px)" height="100vh" overflowY="auto" position="relative">
-        <User user={{}} />
-        <Page />
+        <User />
+        {renderPage()}
       </Pane>
       <NewFolderDialog close={() => setIsShown(false)} isShown={newFolderIsShown} onNewFolder={() => {}} />
     </Pane>
   );
-};
+}
 
-App.defaultProps = {
-  folders: [],
-};
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context);
 
-/**
- * Catch all handler. Must handle all different page
- * states.
- * 1. Folders - none selected
- * 2. Folders => Folder selected
- * 3. Folders => Folder selected => Document selected
- *
- * An unauth user should not be able to access this page.
- *
- * @param context
- */
+  if (!session) return { redirect: { destination: '/', permanant: false } };
+
+  return { props: {} };
+}
+
 export default App;

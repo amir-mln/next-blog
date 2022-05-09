@@ -11,7 +11,7 @@ export async function getDocsByFolder(db: Db, folderId: string) {
 }
 
 export async function createDoc(db: Db, doc: Doc) {
-  return await db.collection<Doc>('docs').insertOne({ _id: nanoid(), ...doc });
+  return await db.collection<Doc>('docs').insertOne({ ...doc, _id: nanoid() });
 }
 
 export async function updateOne(db: Db, id: string, updates: any) {

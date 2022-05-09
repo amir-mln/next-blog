@@ -18,18 +18,31 @@ import type { Session } from 'next-auth';
 
 type pageProps = { folders?: Folder[]; activeFolder?: Folder; activeDoc?: Doc; activeDocs?: Doc[] };
 
-function App({ folders = [], activeDoc, activeFolder, activeDocs }: pageProps) {
+function App({ folders, activeDoc, activeFolder, activeDocs }: pageProps) {
   const router = useRouter();
   const [newFolderIsShown, setIsShown] = useState(false);
+  const [allFolders, setAllFolders] = useState(folders || []);
   const { status } = useSession();
 
-  const renderPage = () => {
+  async function handleNewFolder(name: string) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/folder`, {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log(res);
+    const data = await res.json();
+
+    setAllFolders((prev) => [...prev, data]);
+  }
+
+  function renderPage() {
     if (activeDoc) return <DocPane folder={activeFolder} doc={activeDoc} />;
 
     if (activeFolder) return <FolderPane folder={activeFolder} docs={activeDocs} />;
 
     return null;
-  };
+  }
 
   if (status === 'loading') return null;
 
@@ -59,14 +72,14 @@ function App({ folders = [], activeDoc, activeFolder, activeDocs }: pageProps) {
           <NewFolderButton onClick={() => setIsShown(true)} />
         </Pane>
         <Pane>
-          <FolderList folders={folders} />{' '}
+          <FolderList folders={allFolders} />
         </Pane>
       </Pane>
       <Pane marginLeft={300} width="calc(100vw - 300px)" height="100vh" overflowY="auto" position="relative">
         <User />
         {renderPage()}
       </Pane>
-      <NewFolderDialog close={() => setIsShown(false)} isShown={newFolderIsShown} onNewFolder={() => {}} />
+      <NewFolderDialog close={() => setIsShown(false)} isShown={newFolderIsShown} onNewFolder={handleNewFolder} />
     </Pane>
   );
 }

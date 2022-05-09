@@ -1,8 +1,7 @@
 import { getToken } from 'next-auth/jwt';
-import { NextResponse } from 'next/server';
-import { CustomNextRequest } from 'types/types';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function middleware(req: CustomNextRequest) {
+export async function middleware(req: NextRequest) {
   const token = await getToken({ req });
 
   if (token) {

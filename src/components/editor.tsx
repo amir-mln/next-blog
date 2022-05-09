@@ -1,22 +1,22 @@
-import React, { FC, useState, useEffect, useRef } from 'react'
-import Embed from '@editorjs/embed'
-import Table from '@editorjs/table'
-import List from '@editorjs/list'
-import Warning from '@editorjs/warning'
-import Code from '@editorjs/code'
-import LinkTool from '@editorjs/link'
-import Image from '@editorjs/image'
-import Raw from '@editorjs/raw'
-import Header from '@editorjs/header'
-import Quote from '@editorjs/quote'
-import Marker from '@editorjs/marker'
-import CheckList from '@editorjs/checklist'
-import Delimiter from '@editorjs/delimiter'
-import InlineCode from '@editorjs/inline-code'
-import SimpleImage from '@editorjs/simple-image'
-import EditorJS from '@editorjs/editorjs'
-import { Icon, Pane, Text, TickIcon, Spinner, majorScale } from 'evergreen-ui'
-import { useThrottleCallback } from '@react-hook/throttle'
+import React, { FC, useState, useEffect, useRef } from 'react';
+import Embed from '@editorjs/embed';
+import Table from '@editorjs/table';
+import List from '@editorjs/list';
+import Warning from '@editorjs/warning';
+import Code from '@editorjs/code';
+import LinkTool from '@editorjs/link';
+import Image from '@editorjs/image';
+import Raw from '@editorjs/raw';
+import Header from '@editorjs/header';
+import Quote from '@editorjs/quote';
+import Marker from '@editorjs/marker';
+import CheckList from '@editorjs/checklist';
+import Delimiter from '@editorjs/delimiter';
+import InlineCode from '@editorjs/inline-code';
+import SimpleImage from '@editorjs/simple-image';
+import EditorJS from '@editorjs/editorjs';
+import { Icon, Pane, Text, TickIcon, Spinner, majorScale } from 'evergreen-ui';
+import { useThrottleCallback } from '@react-hook/throttle';
 
 const saveEditor = async (docId: string, data: any) => {
   await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/doc/${docId}`, {
@@ -25,8 +25,8 @@ const saveEditor = async (docId: string, data: any) => {
     headers: {
       'Content-Type': 'application/json',
     },
-  })
-}
+  });
+};
 
 const EDITOR_JS_TOOLS = {
   embed: Embed,
@@ -44,32 +44,32 @@ const EDITOR_JS_TOOLS = {
   delimiter: Delimiter,
   inlineCode: InlineCode,
   simpleImage: SimpleImage,
-}
+};
 
 const Editor: FC<{ docId: string; content: any }> = ({ content, docId }) => {
-  const editor = useRef(null)
-  const [saving, setSaving] = useState(false)
-  const [doneSaving, setDoneSaving] = useState(false)
+  const editor = useRef(null);
+  const [saving, setSaving] = useState(false);
+  const [doneSaving, setDoneSaving] = useState(false);
 
   const save = useThrottleCallback(async () => {
     if (editor.current) {
-      const data = await editor.current.save()
+      const data = await editor.current.save();
 
-      setSaving(true)
-      setDoneSaving(false)
+      setSaving(true);
+      setDoneSaving(false);
 
-      await saveEditor(docId, { content: data })
+      await saveEditor(docId, { content: data });
 
       setTimeout(() => {
-        setSaving(false)
-        setDoneSaving(true)
+        setSaving(false);
+        setDoneSaving(true);
 
         setTimeout(() => {
-          setDoneSaving(false)
-        }, 3000)
-      }, 2500)
+          setDoneSaving(false);
+        }, 3000);
+      }, 2500);
     }
-  }, 30)
+  }, 30);
 
   useEffect(() => {
     const editorJs = new EditorJS({
@@ -79,20 +79,20 @@ const Editor: FC<{ docId: string; content: any }> = ({ content, docId }) => {
       autofocus: true,
       placeholder: 'Let it be known.',
       onChange: save,
-    })
+    });
 
-    editor.current = editorJs
+    editor.current = editorJs;
 
     return () => {
       if (editor.current) {
         try {
-          editor.current.destroy()
+          editor.current.destroy();
         } catch {
-          console.warn('error destroying editor')
+          console.warn('error destroying editor');
         }
       }
-    }
-  }, [save, content])
+    };
+  }, [save, content]);
 
   return (
     <Pane width="100%" position="relative">
@@ -116,11 +116,11 @@ const Editor: FC<{ docId: string; content: any }> = ({ content, docId }) => {
         </Pane>
       ) : null}
     </Pane>
-  )
-}
+  );
+};
 
 Editor.defaultProps = {
   content: {},
-}
+};
 
-export default Editor
+export default Editor;

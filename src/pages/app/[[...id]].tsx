@@ -75,23 +75,23 @@ const getFolders = folder.getFolders;
 const getDocsByFolder = doc.getDocsByFolder;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = (await getSession(context)) as Session & { user?: { _id: string } };
+  const caughtIds = context.params.id;
+  const session = (await getSession(context)) as Session & { user?: { id: string } };
 
   if (!session) return { redirect: { destination: '/', permanant: false } };
 
-  const caughtIds = context.params.id;
+  let activeDoc: Doc = null;
+  let activeDocs: Doc[] = null;
+  let activeFolder: Folder = null;
   const db = await getDatabase();
-  const folders = await getFolders(db, session.user._id);
-  let activeFolder: Folder;
-  let activeDocs: Doc[];
-  let activeDoc: Doc;
+  const folders = await getFolders(db, session.user.id);
 
-  if (caughtIds.length) {
+  if (caughtIds?.length) {
     activeFolder = folders.find((f) => f._id === caughtIds[0]);
     activeDocs = await getDocsByFolder(db, activeFolder._id);
   }
 
-  if (caughtIds.length > 1) activeDoc = activeDocs.find((doc) => doc._id === caughtIds[1]);
+  if (caughtIds?.length > 1) activeDoc = activeDocs.find((doc) => doc._id === caughtIds[1]);
 
   return { props: { folders, activeFolder, activeDocs, activeDoc } };
 }

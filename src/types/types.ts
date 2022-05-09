@@ -27,13 +27,13 @@ export interface CustomNextRequest extends NextRequest {
 }
 
 export interface Folder {
-  _id: string;
+  _id?: string;
   createdBy: string;
   name: string;
 }
 
 export interface Doc {
-  _id: string;
+  _id?: string;
   createdBy: string;
   folderId: string;
   name: string;

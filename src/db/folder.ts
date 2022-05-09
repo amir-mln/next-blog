@@ -1,6 +1,11 @@
-import { Db } from 'mongodb'
-import { nanoid } from 'nanoid'
+import { Db } from 'mongodb';
+import { nanoid } from 'nanoid';
+import { Folder } from 'types/types';
 
-export const createFolder = async (db: Db, folder: { createdBy: string; name: string }) => {}
+export async function createFolder(db: Db, folder: Folder) {
+  return await db.collection<Folder>('folders').insertOne({ _id: nanoid(), ...folder });
+}
 
-export const getFolders = async (db: Db, userId: string) => {}
+export async function getFolders(db: Db, userId: string) {
+  return await db.collection<Folder>('folders').find({ createdBy: userId }).toArray();
+}

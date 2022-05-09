@@ -1,4 +1,4 @@
-import { connectToDB } from 'db/connect';
+import { clientPromise, getDatabase } from 'db/connect';
 
 declare global {
   namespace NodeJS {
@@ -9,9 +9,8 @@ declare global {
 }
 
 export default async function database(req, res, next) {
-  const { db, dbClient } = await connectToDB();
-  req.db = db;
-  req.dbClinet = dbClient;
+  req.db = await getDatabase();
+  req.mongoClient = await clientPromise;
 
   next();
 }

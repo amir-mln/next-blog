@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { Pane, majorScale, Text } from 'evergreen-ui';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 
 import Logo from 'components/logo';
 import SocialButton from 'components/socialButton';

@@ -1,5 +1,6 @@
 import { Db, MongoClient } from 'mongodb';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest } from 'next/server';
+import { JWT } from 'next-auth/jwt';
 
 export interface PostFrontMatter {
   title: string;
@@ -19,8 +20,22 @@ export interface UserSession {
   name: string;
 }
 
-export interface Request extends NextApiRequest {
-  db: Db;
-  dbClient: MongoClient;
-  user: { email: string; id: string };
+export interface CustomNextRequest extends NextRequest {
+  db?: Db;
+  mongoClient?: MongoClient;
+  user?: JWT;
+}
+
+export interface Folder {
+  _id: string;
+  createdBy: string;
+  name: string;
+}
+
+export interface Doc {
+  _id: string;
+  createdBy: string;
+  folderId: string;
+  name: string;
+  content?: any;
 }

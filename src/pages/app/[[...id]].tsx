@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { FC, useState } from 'react';
+import type { GetServerSidePropsContext } from 'next';
 import { Pane, Dialog, majorScale } from 'evergreen-ui';
 import { getSession, useSession } from 'next-auth/react';
 
@@ -10,10 +11,12 @@ import FolderList from 'components/folderList';
 import FolderPane from 'components/folderPane';
 import NewFolderButton from 'components/newFolderButton';
 import NewFolderDialog from 'components/newFolderDialog';
+import { folder, doc, getDatabase } from 'db';
 
-import type { GetServerSidePropsContext } from 'next';
+import type { Doc, Folder } from 'types/types';
+import type { Session } from 'next-auth';
 
-type pageProps = { folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs?: any[] };
+type pageProps = { folders?: Folder[]; activeFolder?: Folder; activeDoc?: Doc; activeDocs?: Doc[] };
 
 function App({ folders = [], activeDoc, activeFolder, activeDocs }: pageProps) {
   const router = useRouter();
@@ -68,12 +71,29 @@ function App({ folders = [], activeDoc, activeFolder, activeDocs }: pageProps) {
   );
 }
 
+const getFolders = folder.getFolders;
+const getDocsByFolder = doc.getDocsByFolder;
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
+  const session = (await getSession(context)) as Session & { user?: { _id: string } };
 
   if (!session) return { redirect: { destination: '/', permanant: false } };
 
-  return { props: {} };
+  const caughtIds = context.params.id;
+  const db = await getDatabase();
+  const folders = await getFolders(db, session.user._id);
+  let activeFolder: Folder;
+  let activeDocs: Doc[];
+  let activeDoc: Doc;
+
+  if (caughtIds.length) {
+    activeFolder = folders.find((f) => f._id === caughtIds[0]);
+    activeDocs = await getDocsByFolder(db, activeFolder._id);
+  }
+
+  if (caughtIds.length > 1) activeDoc = activeDocs.find((doc) => doc._id === caughtIds[1]);
+
+  return { props: { folders, activeFolder, activeDocs, activeDoc } };
 }
 
 export default App;

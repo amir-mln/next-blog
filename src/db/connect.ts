@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === 'development') {
   clientPromise = client.connect();
 }
 
-async function getDatabse() {
+async function getDatabase() {
   if (!database) {
     const mongoClient = await clientPromise;
     database = mongoClient.db(process.env.MONGODB_NAME);
@@ -37,4 +37,4 @@ async function getDatabse() {
 
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
-export { clientPromise, getDatabse };
+export { clientPromise, getDatabase };

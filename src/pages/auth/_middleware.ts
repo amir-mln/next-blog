@@ -1,10 +1,11 @@
-import { getSession } from 'next-auth/react';
-import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
+import { NextFetchEvent, NextResponse } from 'next/server';
+import { CustomNextRequest } from 'types/types';
 
-export async function middleware(req: NextRequest, event: NextFetchEvent) {
-  const haseSession = Object.hasOwn(req.cookies, 'next-auth.session-token');
+export async function middleware(req: CustomNextRequest) {
+  const token = getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  if (haseSession) {
+  if (token) {
     const url = req.nextUrl.clone();
     url.pathname = '/';
     return NextResponse.redirect(url);

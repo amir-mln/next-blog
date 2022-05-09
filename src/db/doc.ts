@@ -1,10 +1,19 @@
-import { Db } from 'mongodb'
-import { nanoid } from 'nanoid'
+import { Db } from 'mongodb';
+import { nanoid } from 'nanoid';
+import { Doc } from 'types/types';
 
-export const getOneDoc = async (db: Db, id: string) => {}
+export async function getOneDoc(db: Db, id: string) {
+  return await db.collection<Doc>('docs').findOne({ _id: id });
+}
 
-export const getDocsByFolder = async (db: Db, folderId: string) => {}
+export async function getDocsByFolder(db: Db, folderId: string) {
+  return await db.collection<Doc>('docs').find({ folderId }).toArray();
+}
 
-export const createDoc = async (db: Db, doc: { createdBy: string; folder: string; name: string; content?: any }) => {}
+export async function createDoc(db: Db, doc: Doc) {
+  return await db.collection<Doc>('docs').insertOne({ _id: nanoid(), ...doc });
+}
 
-export const updateOne = async (db: Db, id: string, updates: any) => {}
+export async function updateOne(db: Db, id: string, updates: any) {
+  return db.collection<Doc>('docs').updateOne({ _id: id }, { $set: updates });
+}
